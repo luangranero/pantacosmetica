@@ -4,7 +4,7 @@
 const WHATSAPP = '5511939020616';
 const MARGEM = 0.40;
 // URL do App da Web do Google Apps Script (apps-script/Code.gs) que grava os cadastros na planilha
-const SHEETS_URL = '';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzQjREEJ3eC1aqFTBrnjigVwrnvdprJJtvQGxlJABBU5CVNKcQ5RERaVbNzrl11FaUw/exec';
 
 const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 const brl2 = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
