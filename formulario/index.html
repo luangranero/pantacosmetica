@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de revendedora | Panta Cosmética</title>
+  <meta name="description" content="Podóloga, transforme cada atendimento em renda extra. Revenda a linha de podologia Panta Cosmética para suas clientes com 40% de lucro.">
+  <meta property="og:title" content="Podóloga, sua indicação vale dinheiro | Panta Cosmética">
+  <meta property="og:description" content="Revenda produtos de podologia com eficácia comprovada para suas clientes e ganhe 40% em cada venda.">
+  <meta property="og:image" content="../assets/img/hero-pes.jpg">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <meta name="theme-color" content="#d9622b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css?v=10">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '495726663063494');
+  fbq('track', 'PageView');
+  fbq('track', 'Lead'); // chegou em /formulario/ = enviou o contato
+  </script>
+  <!-- End Meta Pixel Code -->
+  <!-- TODO: inserir aqui o Google Analytics, se for usar -->
+
+</head>
+<body data-page="formulario" data-base="../">
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=495726663063494&ev=PageView&noscript=1" alt=""></noscript>
+
+<header class="header" id="topo">
+  <div class="container header__inner">
+    <a href="../" class="logo" aria-label="Panta Cosmética · voltar ao site">
+      <span class="logo__box">PANTA</span>
+      <span class="logo__sub">COSMÉTICA</span>
+    </a>
+    <a href="../" class="header__back">← Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="section section--dark page-quiz" id="cadastro">
+  <div class="container quiz-wrap">
+    <div class="quiz-intro">
+      <p class="eyebrow eyebrow--light">Cadastro de revendedora</p>
+      <h2>Falta pouco, <em><span id="leadNome">podóloga</span>!</em></h2>
+      <p>Recebemos seu contato. Agora responda 5 perguntas rápidas para montarmos a melhor condição e o kit inicial ideal para o seu perfil de atendimento.</p>
+      <ul class="quiz-meta">
+        <li>5 perguntas</li><li>menos de 1 minuto</li><li>sem compromisso</li>
+      </ul>
+    </div>
+
+    <form class="quiz" id="quiz" novalidate>
+      <!-- P2 -->
+      <fieldset class="quiz__screen is-active" data-step="2">
+                <legend><span class="quiz__counter">Etapa 2 de 6</span>Há quanto tempo você atua como podóloga?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="tempo" value="Estou me formando"><span>Estou me formando</span></label>
+          <label class="option"><input type="radio" name="tempo" value="Menos de 2 anos"><span>Menos de 2 anos</span></label>
+          <label class="option"><input type="radio" name="tempo" value="De 2 a 5 anos"><span>De 2 a 5 anos</span></label>
+          <label class="option"><input type="radio" name="tempo" value="Mais de 5 anos"><span>Mais de 5 anos</span></label>
+        </div>
+      </fieldset>
+
+      <!-- P3 -->
+      <fieldset class="quiz__screen" data-step="3">
+                <legend><span class="quiz__counter">Etapa 3 de 6</span>Onde você atende suas clientes?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="local" value="Clínica / consultório próprio"><span>Clínica ou consultório próprio</span></label>
+          <label class="option"><input type="radio" name="local" value="Atendo a domicílio"><span>Atendo a domicílio</span></label>
+          <label class="option"><input type="radio" name="local" value="Clínica / salão de terceiros"><span>Em clínica ou salão de terceiros</span></label>
+          <label class="option"><input type="radio" name="local" value="Mais de um formato"><span>Mais de um formato</span></label>
+        </div>
+      </fieldset>
+
+      <!-- P4 -->
+      <fieldset class="quiz__screen" data-step="4">
+                <legend><span class="quiz__counter">Etapa 4 de 6</span>Quantos atendimentos você faz por semana?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="atendimentos" value="Até 10"><span>Até 10</span></label>
+          <label class="option"><input type="radio" name="atendimentos" value="De 10 a 25"><span>De 10 a 25</span></label>
+          <label class="option"><input type="radio" name="atendimentos" value="De 25 a 50"><span>De 25 a 50</span></label>
+          <label class="option"><input type="radio" name="atendimentos" value="Mais de 50"><span>Mais de 50</span></label>
+        </div>
+      </fieldset>
+
+      <!-- P5 -->
+      <fieldset class="quiz__screen" data-step="5">
+                <legend><span class="quiz__counter">Etapa 5 de 6</span>Hoje você vende produtos para suas clientes?</legend>
+        <div class="options">
+          <label class="option"><input type="radio" name="vende" value="Sim, de outra marca"><span>Sim, de outra marca</span></label>
+          <label class="option"><input type="radio" name="vende" value="Indico, mas não vendo"><span>Indico, mas não vendo</span></label>
+          <label class="option"><input type="radio" name="vende" value="Ainda não"><span>Ainda não, quero começar</span></label>
+        </div>
+      </fieldset>
+
+      <!-- P6 (última: não avança sozinha; o envio abre o WhatsApp) -->
+      <fieldset class="quiz__screen" data-step="6">
+                <legend><span class="quiz__counter">Etapa 6 de 6</span>Qual é o seu principal objetivo com a Panta?</legend>
+        <div class="options" data-final>
+          <label class="option"><input type="radio" name="objetivo" value="Ter uma renda extra"><span>Ter uma renda extra</span></label>
+          <label class="option"><input type="radio" name="objetivo" value="Comprar com desconto para o consultório"><span>Comprar com desconto para o consultório</span></label>
+          <label class="option"><input type="radio" name="objetivo" value="Os dois"><span>Os dois</span></label>
+        </div>
+        <button type="submit" class="btn btn--lg btn--block quiz__submit">Enviar e falar no WhatsApp →</button>
+      </fieldset>
+
+      <div class="quiz__footer" id="quizFooter">
+        <button type="button" class="quiz__back" data-prev>← Voltar</button>
+        <div class="quiz__progress"><span id="quizBar"></span></div>
+      </div>
+      <div class="quiz__alt">
+        <span>Prefere conversar agora?</span>
+        <button type="button" class="btn btn--whats btn--block" data-wa-open>
+          <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><use href="#icon-whats"/></svg>
+          Chamar no WhatsApp
+        </button>
+      </div>
+      <p class="quiz__privacy">🔒 Seus dados vão direto para o time comercial da Panta e não são compartilhados com terceiros.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div>
+      <a href="../" class="logo logo--light"><span class="logo__box">PANTA</span><span class="logo__sub">COSMÉTICA</span></a>
+      <p class="footer__slogan">Cuida bem de você!</p>
+    </div>
+    <div class="footer__links">
+      <a href="https://www.pantacosmetica.com.br" target="_blank" rel="noopener">pantacosmetica.com.br</a>
+      <a href="https://instagram.com/pantacosmetica" target="_blank" rel="noopener">@pantacosmetica</a>
+      <a href="https://instagram.com/panta.neoskin" target="_blank" rel="noopener">@panta.neoskin</a>
+      <span>sac@pantacosmetica.com.br</span>
+    </div>
+  </div>
+  <p class="footer__legal container">© <span id="year"></span> Panta Cosmética. Valores de ganhos são estimativas e não representam garantia de resultado.</p>
+</footer>
+
+<a href="#" class="whats-float" id="whatsFloat" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#icon-whats"/></svg>
+</a>
+
+<!-- Janela do botão de WhatsApp: capta o contato antes de abrir a conversa -->
+<div class="wa-modal" id="waModal" hidden>
+  <div class="wa-modal__backdrop" data-wa-close></div>
+  <form class="wa-modal__card" id="waForm" role="dialog" aria-modal="true" aria-labelledby="waTitle" novalidate>
+    <button type="button" class="wa-modal__close" data-wa-close aria-label="Fechar">×</button>
+    <span class="wa-modal__icon" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="26" height="26"><use href="#icon-whats"/></svg>
+    </span>
+    <h3 id="waTitle">Fale com a Panta no WhatsApp</h3>
+    <p>Deixe seu contato para nosso time te atender mais rápido.</p>
+    <div class="fields">
+      <label class="field"><span>Nome</span><input type="text" name="nome" autocomplete="name" required></label>
+      <label class="field"><span>WhatsApp</span><input type="tel" name="whatsapp" autocomplete="tel" placeholder="(00) 00000-0000" required></label>
+      <div class="field-row">
+        <label class="field"><span>Cidade</span><input type="text" name="cidade" autocomplete="address-level2" required></label>
+        <label class="field field--uf"><span>UF</span><input type="text" name="uf" maxlength="2" autocomplete="address-level1" required></label>
+      </div>
+    </div>
+    <p class="quiz__error" id="waError" hidden>Preencha nome, WhatsApp, cidade e UF.</p>
+    <button type="submit" class="btn btn--whats btn--lg btn--block">Abrir conversa no WhatsApp</button>
+  </form>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="icon-whats" viewBox="0 0 32 32"><path fill="currentColor" d="M16 3C9 3 3.3 8.6 3.3 15.6c0 2.2.6 4.4 1.7 6.3L3 29l7.3-1.9c1.8 1 3.8 1.5 5.8 1.5 7 0 12.7-5.6 12.7-12.6S23 3 16 3zm0 23.1c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-4.3 1.1 1.2-4.2-.3-.4c-1.1-1.7-1.6-3.6-1.6-5.6C5.2 9.8 10 5.1 16 5.1s10.7 4.7 10.7 10.5S21.9 26.1 16 26.1zm5.9-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1c-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2s0-.5.1-.6l.5-.6c.2-.2.2-.4.3-.6s0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.7 1.2 3.2 1.4 3.4c.2.2 2.4 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5s.3-1.4.2-1.5c-.1-.2-.3-.3-.6-.4z"/></symbol>
+</svg>
+
+<script src="../js/main.js?v=10"></script>
+</body>
+</html>

@@ -301,3 +301,21 @@ body.has-modal { overflow: hidden; }
 .quiz__alt { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--line); display: grid; gap: .6rem; text-align: center; }
 .quiz__alt span { font-size: .9rem; font-weight: 700; color: var(--ink-soft); }
 .btn svg { flex: none; }
+
+/* ---- Páginas /formulario e /obrigado ---- */
+.header__back { text-decoration: none; font-weight: 700; font-size: .95rem; color: var(--ink-soft); }
+.header__back:hover { color: var(--orange); }
+.page-quiz, .page-thanks { min-height: calc(100vh - 72px); display: flex; align-items: center; }
+.thanks { text-align: center; }
+.thanks h1 { font-size: clamp(2rem, 4.5vw, 3rem); }
+.thanks h1 em { font-style: italic; color: #ff9a68; font-weight: 500; }
+.thanks__icon { display: inline-grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; background: #25d366; color: var(--white); font-size: 2rem; font-weight: 800; margin-bottom: 1.4rem; }
+.thanks__lead { opacity: .85; font-size: 1.1rem; max-width: 34em; margin: 0 auto 2rem; }
+.thanks__note { font-size: .85rem; opacity: .6; margin: .9rem 0 0; }
+.thanks__next { list-style: none; padding: 0; margin: 3rem 0 2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: left; counter-reset: n; }
+.thanks__next li { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); padding: 1.3rem; counter-increment: n; }
+.thanks__next li::before { content: counter(n); display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--orange); font-weight: 800; margin-bottom: .7rem; }
+.thanks__next strong { display: block; }
+.thanks__next span { font-size: .9rem; opacity: .75; }
+.thanks__back { color: #ffb48f; font-weight: 700; text-decoration: none; }
+@media (max-width: 640px) { .thanks__next { grid-template-columns: 1fr; } }
