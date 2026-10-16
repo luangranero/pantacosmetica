@@ -3,7 +3,7 @@
  * O contato chega primeiro (status "Só contato"); quando a pessoa termina o quiz,
  * a mesma linha é completada com as respostas (status "Completo").
  *
- * Cabeçalho esperado na linha 1 da primeira aba (A até M):
+ * O cabeçalho é criado automaticamente na linha 1 da primeira aba (A até M):
  * Data/hora | Nome | WhatsApp | Cidade | UF | Tempo de atuação | Onde atende |
  * Atendimentos/semana | Já vende produtos | Objetivo | Página | Status | ID
  *
@@ -20,6 +20,16 @@
 
 const CAMPOS = ['nome', 'whatsapp', 'cidade', 'uf', 'tempo', 'local', 'atendimentos', 'vende', 'objetivo', 'pagina', 'status', 'id'];
 const COL_ID = CAMPOS.length + 1; // +1 pela coluna Data/hora
+const CABECALHO = ['Data/hora', 'Nome', 'WhatsApp', 'Cidade', 'UF', 'Tempo de atuação', 'Onde atende',
+  'Atendimentos/semana', 'Já vende produtos', 'Objetivo', 'Página', 'Status', 'ID'];
+
+// Garante o cabeçalho na linha 1 (cria se a planilha estiver vazia ou se a linha 1 tiver dados)
+function garantirCabecalho(sheet) {
+  if (sheet.getLastRow() > 0 && sheet.getRange(1, 1).getValue() === CABECALHO[0]) return;
+  if (sheet.getLastRow() > 0) sheet.insertRowBefore(1);
+  sheet.getRange(1, 1, 1, CABECALHO.length).setValues([CABECALHO]).setFontWeight('bold');
+  sheet.setFrozenRows(1);
+}
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -27,6 +37,7 @@ function doPost(e) {
   try {
     const p = e.parameter || {};
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    garantirCabecalho(sheet);
     // Prefixo ' mantém WhatsApp e demais campos como texto (sem virar número ou data)
     const valores = CAMPOS.map((c) => "'" + String(p[c] || '').slice(0, 200));
 
