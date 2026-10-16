@@ -285,3 +285,16 @@ a.material:hover { background: var(--orange-soft); transform: translateY(-3px); 
   .quiz legend { font-size: 1.35rem; }
   .footer__links { text-align: left; }
 }
+
+/* ---- Janela do botão de WhatsApp ---- */
+.wa-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; }
+.wa-modal__backdrop { position: absolute; inset: 0; background: rgba(36, 26, 21, .6); backdrop-filter: blur(3px); animation: fadeIn .2s ease; }
+.wa-modal__card { position: relative; width: 100%; max-width: 420px; max-height: calc(100vh - 40px); overflow-y: auto; background: var(--white); border-radius: 24px; padding: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,.35); animation: fadeIn .25s ease; }
+.wa-modal__card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; margin-bottom: .3rem; }
+.wa-modal__card > p:not(.quiz__error) { color: var(--ink-soft); margin: 0 0 1.3rem; font-size: .95rem; }
+.wa-modal__icon { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: #e7f9ee; color: #1ea952; margin-bottom: .9rem; }
+.wa-modal__close { position: absolute; top: .8rem; right: .9rem; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--cream); color: var(--ink-soft); font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.wa-modal__close:hover { background: var(--orange-soft); color: var(--orange); }
+.btn--whats { background: #25d366; border-color: #25d366; }
+.btn--whats:hover { background: #1ea952; border-color: #1ea952; box-shadow: 0 8px 20px rgba(37, 211, 102, .35); }
+body.has-modal { overflow: hidden; }

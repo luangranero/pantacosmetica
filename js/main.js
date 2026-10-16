@@ -22,8 +22,6 @@ nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
   navToggle.setAttribute('aria-expanded', 'false');
 }));
 
-/* ---------- WhatsApp flutuante ---------- */
-document.getElementById('whatsFloat').href = waLink('Olá! Sou podóloga e quero saber mais sobre a revenda Panta.');
 document.getElementById('year').textContent = new Date().getFullYear();
 
 /* ---------- Simulador ---------- */
@@ -135,14 +133,28 @@ quiz.querySelectorAll('.option input').forEach((input) => input.addEventListener
 }));
 
 // Máscara simples de telefone
-const tel = quiz.elements.whatsapp;
-tel.addEventListener('input', () => {
-  const d = tel.value.replace(/\D/g, '').slice(0, 11);
-  tel.value = d.length > 10 ? d.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3')
-    : d.length > 6 ? d.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
-    : d.length > 2 ? d.replace(/(\d{2})(\d{0,5})/, '($1) $2')
-    : d;
-});
+function mascaraTelefone(tel) {
+  tel.addEventListener('input', () => {
+    const d = tel.value.replace(/\D/g, '').slice(0, 11);
+    tel.value = d.length > 10 ? d.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3')
+      : d.length > 6 ? d.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+      : d.length > 2 ? d.replace(/(\d{2})(\d{0,5})/, '($1) $2')
+      : d;
+  });
+}
+mascaraTelefone(quiz.elements.whatsapp);
+
+// Valida nome, WhatsApp, cidade e UF de um formulário; marca os campos inválidos
+function contatoValido(f, erroEl) {
+  let ok = true;
+  [f.nome, f.whatsapp, f.cidade, f.uf].forEach((el) => {
+    const valido = el === f.whatsapp ? el.value.replace(/\D/g, '').length >= 10 : el.value.trim() !== '';
+    el.classList.toggle('is-invalid', !valido);
+    if (!valido) ok = false;
+  });
+  erroEl.hidden = ok;
+  return ok;
+}
 
 // Identifica o cadastro para que contato e respostas caiam na mesma linha da planilha
 const leadId = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -176,15 +188,7 @@ function salvarNaPlanilha(dados) {
 
 // Etapa 1: valida o contato, já grava o lead e segue para as perguntas
 document.getElementById('quizContato').addEventListener('click', () => {
-  const f = quiz.elements;
-  let ok = true;
-  [f.nome, f.whatsapp, f.cidade, f.uf].forEach((el) => {
-    const valido = el === f.whatsapp ? el.value.replace(/\D/g, '').length >= 10 : el.value.trim() !== '';
-    el.classList.toggle('is-invalid', !valido);
-    if (!valido) ok = false;
-  });
-  document.getElementById('quizError').hidden = ok;
-  if (!ok) return;
+  if (!contatoValido(quiz.elements, document.getElementById('quizError'))) return;
   salvarNaPlanilha(dadosDoCadastro('Só contato'));
   go(2);
 });
@@ -217,6 +221,52 @@ quiz.addEventListener('submit', (e) => {
   document.getElementById('quizWhats').href = link;
   go(TOTAL + 1);
   window.open(link, '_blank', 'noopener');
+});
+
+/* ---------- Botão flutuante de WhatsApp (capta o contato antes de abrir a conversa) ---------- */
+const whatsFloat = document.getElementById('whatsFloat');
+const waModal = document.getElementById('waModal');
+const waForm = document.getElementById('waForm');
+whatsFloat.href = waLink('Olá! Sou podóloga e quero saber mais sobre a revenda Panta.');
+mascaraTelefone(waForm.elements.whatsapp);
+
+function abrirWaModal() {
+  // Reaproveita o que a pessoa já digitou no cadastro
+  ['nome', 'whatsapp', 'cidade', 'uf'].forEach((c) => {
+    if (!waForm.elements[c].value) waForm.elements[c].value = quiz.elements[c].value;
+  });
+  waModal.hidden = false;
+  document.body.classList.add('has-modal');
+  setTimeout(() => waForm.elements.nome.focus(), 50);
+}
+function fecharWaModal() {
+  waModal.hidden = true;
+  document.body.classList.remove('has-modal');
+  whatsFloat.focus();
+}
+
+whatsFloat.addEventListener('click', (e) => { e.preventDefault(); abrirWaModal(); });
+waModal.querySelectorAll('[data-wa-close]').forEach((el) => el.addEventListener('click', fecharWaModal));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !waModal.hidden) fecharWaModal(); });
+
+waForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = waForm.elements;
+  if (!contatoValido(f, document.getElementById('waError'))) return;
+  const nome = f.nome.value.trim();
+  const cidade = `${f.cidade.value.trim()}/${f.uf.value.trim().toUpperCase()}`;
+  salvarNaPlanilha({
+    id: 'wa-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    status: 'Botão WhatsApp',
+    nome,
+    whatsapp: f.whatsapp.value,
+    cidade: f.cidade.value.trim(),
+    uf: f.uf.value.trim().toUpperCase(),
+    pagina: location.href,
+  });
+  const link = waLink(`Olá! Sou ${nome}, de ${cidade}, e quero saber mais sobre a revenda Panta.`);
+  window.open(link, '_blank', 'noopener');
+  fecharWaModal();
 });
 
 /* ---------- Animação ao rolar ---------- */
