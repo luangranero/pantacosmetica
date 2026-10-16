@@ -298,3 +298,6 @@ a.material:hover { background: var(--orange-soft); transform: translateY(-3px); 
 .btn--whats { background: #25d366; border-color: #25d366; }
 .btn--whats:hover { background: #1ea952; border-color: #1ea952; box-shadow: 0 8px 20px rgba(37, 211, 102, .35); }
 body.has-modal { overflow: hidden; }
+.quiz__alt { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--line); display: grid; gap: .6rem; text-align: center; }
+.quiz__alt span { font-size: .9rem; font-weight: 700; color: var(--ink-soft); }
+.btn svg { flex: none; }

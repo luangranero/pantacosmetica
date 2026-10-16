@@ -3,8 +3,8 @@
  * O contato chega primeiro (status "Só contato"); quando a pessoa termina o quiz,
  * a mesma linha é completada com as respostas (status "Completo").
  *
- * Cabeçalho esperado na linha 1 da primeira aba (A até N):
- * Data/hora | Nome | WhatsApp | Cidade | UF | E-mail | Tempo de atuação | Onde atende |
+ * Cabeçalho esperado na linha 1 da primeira aba (A até M):
+ * Data/hora | Nome | WhatsApp | Cidade | UF | Tempo de atuação | Onde atende |
  * Atendimentos/semana | Já vende produtos | Objetivo | Página | Status | ID
  *
  * Como instalar:
@@ -18,7 +18,7 @@
  * (Ao alterar este código depois: Implantar → Gerenciar implantações → editar → Nova versão)
  */
 
-const CAMPOS = ['nome', 'whatsapp', 'cidade', 'uf', 'email', 'tempo', 'local', 'atendimentos', 'vende', 'objetivo', 'pagina', 'status', 'id'];
+const CAMPOS = ['nome', 'whatsapp', 'cidade', 'uf', 'tempo', 'local', 'atendimentos', 'vende', 'objetivo', 'pagina', 'status', 'id'];
 const COL_ID = CAMPOS.length + 1; // +1 pela coluna Data/hora
 
 function doPost(e) {

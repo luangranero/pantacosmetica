@@ -1,7 +1,7 @@
 /* ===== Panta · Revenda para Podólogas ===== */
 
-// TODO: trocar pelo WhatsApp comercial da Panta (DDI + DDD + número, só dígitos)
-const WHATSAPP = '5500000000000';
+// WhatsApp comercial da Panta: (11) 93902-0616 (DDI + DDD + número, só dígitos)
+const WHATSAPP = '5511939020616';
 const MARGEM = 0.40;
 // URL do App da Web do Google Apps Script (apps-script/Code.gs) que grava os cadastros na planilha
 const SHEETS_URL = '';
@@ -168,7 +168,6 @@ function dadosDoCadastro(status) {
     whatsapp: f.whatsapp.value,
     cidade: f.cidade.value.trim(),
     uf: f.uf.value.trim().toUpperCase(),
-    email: f.email.value.trim(),
     tempo: f.tempo.value,
     local: f.local.value,
     atendimentos: f.atendimentos.value,
@@ -207,7 +206,6 @@ quiz.addEventListener('submit', (e) => {
     `*Nome:* ${f.nome.value.trim()}`,
     `*WhatsApp:* ${f.whatsapp.value}`,
     `*Cidade:* ${f.cidade.value.trim()}/${f.uf.value.trim().toUpperCase()}`,
-    f.email.value.trim() ? `*E-mail:* ${f.email.value.trim()}` : null,
     '',
     `*Tempo de atuação:* ${f.tempo.value || '-'}`,
     `*Onde atendo:* ${f.local.value || '-'}`,
@@ -246,6 +244,7 @@ function fecharWaModal() {
 }
 
 whatsFloat.addEventListener('click', (e) => { e.preventDefault(); abrirWaModal(); });
+document.querySelectorAll('[data-wa-open]').forEach((el) => el.addEventListener('click', abrirWaModal));
 waModal.querySelectorAll('[data-wa-close]').forEach((el) => el.addEventListener('click', fecharWaModal));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !waModal.hidden) fecharWaModal(); });
 
