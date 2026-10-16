@@ -64,5 +64,5 @@ function encontrarLinha(sheet, id) {
 }
 
 function doGet() {
-  return ContentService.createTextOutput('Panta · endpoint de cadastros ativo');
+  return ContentService.createTextOutput('Panta · endpoint de cadastros ativo · v2 (cabeçalho automático)');
 }
