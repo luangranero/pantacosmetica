@@ -3,6 +3,8 @@
 // TODO: trocar pelo WhatsApp comercial da Panta (DDI + DDD + número, só dígitos)
 const WHATSAPP = '5500000000000';
 const MARGEM = 0.40;
+// URL do App da Web do Google Apps Script (apps-script/Code.gs) que grava os cadastros na planilha
+const SHEETS_URL = '';
 
 const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 const brl2 = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -141,6 +143,14 @@ tel.addEventListener('input', () => {
     : d;
 });
 
+// Envia o cadastro para o Google Sheets sem segurar a abertura do WhatsApp
+function salvarNaPlanilha(dados) {
+  if (!SHEETS_URL) return;
+  const body = new URLSearchParams(dados);
+  if (navigator.sendBeacon && navigator.sendBeacon(SHEETS_URL, body)) return;
+  fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', keepalive: true, body }).catch(() => {});
+}
+
 quiz.addEventListener('submit', (e) => {
   e.preventDefault();
   const f = quiz.elements;
@@ -169,7 +179,19 @@ quiz.addEventListener('submit', (e) => {
     `*Objetivo:* ${f.objetivo.value || '-'}`,
   ].filter((l) => l !== null).join('\n');
 
-  // TODO: se quiser guardar os leads, enviar também para uma planilha/CRM aqui (ex.: Google Apps Script, RD Station)
+  salvarNaPlanilha({
+    nome: f.nome.value.trim(),
+    whatsapp: f.whatsapp.value,
+    cidade: f.cidade.value.trim(),
+    uf: f.uf.value.trim().toUpperCase(),
+    email: f.email.value.trim(),
+    tempo: f.tempo.value,
+    local: f.local.value,
+    atendimentos: f.atendimentos.value,
+    vende: f.vende.value,
+    objetivo: f.objetivo.value,
+    pagina: location.href,
+  });
   const link = waLink(msg);
   document.getElementById('quizWhats').href = link;
   go(TOTAL + 1);
