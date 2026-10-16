@@ -200,7 +200,7 @@ a.material:hover { background: var(--orange-soft); transform: translateY(-3px); 
 .quiz__screen { display: none; border: 0; margin: 0; padding: 0; min-width: 0; animation: fadeIn .35s ease; }
 .quiz__screen.is-active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
-.quiz__counter { text-transform: uppercase; letter-spacing: .14em; font-size: .75rem; font-weight: 800; color: var(--orange); margin: 0 0 .5rem; }
+.quiz__counter { display: block; font-family: var(--sans); line-height: 1.4; text-transform: uppercase; letter-spacing: .14em; font-size: .75rem; font-weight: 800; color: var(--orange); margin: 0 0 .5rem; }
 .quiz legend { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.2; margin-bottom: 1.5rem; padding: 0; }
 .options { display: grid; gap: .7rem; }
 .option { display: block; cursor: pointer; }
@@ -221,6 +221,7 @@ a.material:hover { background: var(--orange-soft); transform: translateY(-3px); 
 .field-row { display: grid; grid-template-columns: 1fr 90px; gap: .8rem; }
 .field--uf input { text-transform: uppercase; }
 .quiz__error { color: #c0392b; font-weight: 700; font-size: .9rem; margin: 0 0 1rem; }
+.quiz__submit { margin-top: 1.4rem; }
 .quiz__start { text-align: center; padding: 1.5rem 0; }
 .quiz__start-icon { display: inline-grid; place-items: center; width: 70px; height: 70px; border-radius: 50%; background: var(--orange-soft); color: var(--orange); font-size: 1.8rem; margin-bottom: 1.2rem; }
 .quiz__start h3 { font-family: var(--serif); font-size: 1.7rem; font-weight: 600; }

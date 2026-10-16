@@ -128,8 +128,9 @@ function go(n) {
 quiz.querySelector('[data-next]').addEventListener('click', () => go(1));
 quiz.querySelector('[data-prev]').addEventListener('click', () => go(Math.max(step - 1, 1)));
 
-// Ao escolher uma opção, avança automaticamente
+// Ao escolher uma opção, avança automaticamente (menos na última etapa, que tem botão de envio)
 quiz.querySelectorAll('.option input').forEach((input) => input.addEventListener('change', () => {
+  if (input.closest('[data-final]')) return;
   setTimeout(() => go(step + 1), 280);
 }));
 
@@ -143,7 +144,29 @@ tel.addEventListener('input', () => {
     : d;
 });
 
-// Envia o cadastro para o Google Sheets sem segurar a abertura do WhatsApp
+// Identifica o cadastro para que contato e respostas caiam na mesma linha da planilha
+const leadId = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+function dadosDoCadastro(status) {
+  const f = quiz.elements;
+  return {
+    id: leadId,
+    status,
+    nome: f.nome.value.trim(),
+    whatsapp: f.whatsapp.value,
+    cidade: f.cidade.value.trim(),
+    uf: f.uf.value.trim().toUpperCase(),
+    email: f.email.value.trim(),
+    tempo: f.tempo.value,
+    local: f.local.value,
+    atendimentos: f.atendimentos.value,
+    vende: f.vende.value,
+    objetivo: f.objetivo.value,
+    pagina: location.href,
+  };
+}
+
+// Envia o cadastro para o Google Sheets sem segurar a navegação
 function salvarNaPlanilha(dados) {
   if (!SHEETS_URL) return;
   const body = new URLSearchParams(dados);
@@ -151,19 +174,29 @@ function salvarNaPlanilha(dados) {
   fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', keepalive: true, body }).catch(() => {});
 }
 
-quiz.addEventListener('submit', (e) => {
-  e.preventDefault();
+// Etapa 1: valida o contato, já grava o lead e segue para as perguntas
+document.getElementById('quizContato').addEventListener('click', () => {
   const f = quiz.elements;
-  const obrigatorios = [f.nome, f.whatsapp, f.cidade, f.uf];
   let ok = true;
-  obrigatorios.forEach((el) => {
+  [f.nome, f.whatsapp, f.cidade, f.uf].forEach((el) => {
     const valido = el === f.whatsapp ? el.value.replace(/\D/g, '').length >= 10 : el.value.trim() !== '';
     el.classList.toggle('is-invalid', !valido);
     if (!valido) ok = false;
   });
   document.getElementById('quizError').hidden = ok;
   if (!ok) return;
+  salvarNaPlanilha(dadosDoCadastro('Só contato'));
+  go(2);
+});
 
+// Enter nos campos de contato avança em vez de enviar o formulário
+quiz.querySelectorAll('[data-step="1"] input').forEach((el) => el.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('quizContato').click(); }
+}));
+
+quiz.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = quiz.elements;
   const msg = [
     'Olá! Quero ser revendedora Panta 🧡',
     '',
@@ -179,19 +212,7 @@ quiz.addEventListener('submit', (e) => {
     `*Objetivo:* ${f.objetivo.value || '-'}`,
   ].filter((l) => l !== null).join('\n');
 
-  salvarNaPlanilha({
-    nome: f.nome.value.trim(),
-    whatsapp: f.whatsapp.value,
-    cidade: f.cidade.value.trim(),
-    uf: f.uf.value.trim().toUpperCase(),
-    email: f.email.value.trim(),
-    tempo: f.tempo.value,
-    local: f.local.value,
-    atendimentos: f.atendimentos.value,
-    vende: f.vende.value,
-    objetivo: f.objetivo.value,
-    pagina: location.href,
-  });
+  salvarNaPlanilha(dadosDoCadastro('Completo'));
   const link = waLink(msg);
   document.getElementById('quizWhats').href = link;
   go(TOTAL + 1);
