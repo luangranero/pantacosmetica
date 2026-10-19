@@ -24,12 +24,28 @@ function guardarLead(lead) {
 }
 const novoId = (prefixo = '') => prefixo + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
-// Envia o cadastro para o Google Sheets sem segurar a navegação
+// Envia o cadastro para o Google Sheets por POST e, de reserva, por GET (mesmo ID = mesma linha).
+// Devolve uma promessa que resolve quando o POST termina ou em até 1,5 s, para dar tempo
+// de gravar antes de trocar de página (celulares e navegadores do Instagram/Facebook cortam envios pendentes).
 function salvarNaPlanilha(dados) {
-  if (!SHEETS_URL) return;
-  const body = new URLSearchParams(dados);
-  if (navigator.sendBeacon && navigator.sendBeacon(SHEETS_URL, body)) return;
-  fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', keepalive: true, body }).catch(() => {});
+  if (!SHEETS_URL) return Promise.resolve();
+  const params = new URLSearchParams(dados);
+  const post = fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', keepalive: true, body: params }).catch(() => {});
+  new Image().src = `${SHEETS_URL}?${params.toString()}`;
+  return Promise.race([post, new Promise((r) => setTimeout(r, 1500))]);
+}
+
+// Ao voltar pelo botão "Voltar" do navegador, reativa botões que ficaram em "Enviando…"
+window.addEventListener('pageshow', (e) => {
+  if (!e.persisted) return;
+  document.querySelectorAll('[data-label]').forEach((b) => { b.disabled = false; b.innerHTML = b.dataset.label; });
+});
+
+// Mostra "Enviando…" no botão enquanto grava
+function ocupado(btn, texto = 'Enviando…') {
+  btn.disabled = true;
+  btn.dataset.label = btn.innerHTML;
+  btn.textContent = texto;
 }
 
 // Máscara simples de telefone
@@ -206,8 +222,8 @@ if (quiz) {
   if (contatoBtn) {
     const f = quiz.elements;
     mascaraTelefone(f.whatsapp);
-    contatoBtn.addEventListener('click', () => {
-      if (!contatoValido(f, document.getElementById('quizError'))) return;
+    contatoBtn.addEventListener('click', async () => {
+      if (contatoBtn.disabled || !contatoValido(f, document.getElementById('quizError'))) return;
       const lead = {
         id: novoId(),
         nome: f.nome.value.trim(),
@@ -216,7 +232,8 @@ if (quiz) {
         uf: f.uf.value.trim().toUpperCase(),
       };
       guardarLead(lead);
-      salvarNaPlanilha({ ...lead, status: 'Só contato', pagina: location.href });
+      ocupado(contatoBtn);
+      await salvarNaPlanilha({ ...lead, status: 'Só contato', pagina: location.href });
       location.href = `${BASE}formulario/`;
     });
     // Enter nos campos de contato avança em vez de enviar o formulário
@@ -228,9 +245,11 @@ if (quiz) {
   // /formulario/ sem contato na sessão: volta para o início do cadastro
   if (PAGE === 'formulario' && !lerLead()) location.replace(`${BASE}#cadastro`);
 
-  // Última etapa (/formulario/): grava tudo, abre o WhatsApp e vai para /obrigado/
-  quiz.addEventListener('submit', (e) => {
+  // Última etapa (/formulario/): grava tudo e vai para /obrigado/, que abre o WhatsApp
+  quiz.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitBtn = quiz.querySelector('[type="submit"]');
+    if (submitBtn.disabled) return;
     const lead = lerLead();
     if (!lead) { location.href = `${BASE}#cadastro`; return; }
     const f = quiz.elements;
@@ -241,10 +260,9 @@ if (quiz) {
       vende: f.vende.value,
       objetivo: f.objetivo.value,
     };
-    salvarNaPlanilha({ ...lead, ...respostas, status: 'Completo', pagina: location.href });
 
     const msg = [
-      'Olá! Quero ser revendedora Panta 🧡',
+      'Olá! Quero ser revendedora Panta!',
       '',
       `*Nome:* ${lead.nome}`,
       `*WhatsApp:* ${lead.whatsapp}`,
@@ -256,9 +274,9 @@ if (quiz) {
       `*Já vendo produtos:* ${respostas.vende || '-'}`,
       `*Objetivo:* ${respostas.objetivo || '-'}`,
     ].join('\n');
-    const link = waLink(msg);
-    guardarLead({ ...lead, waLink: link });
-    window.open(link, '_blank', 'noopener');
+    guardarLead({ ...lead, waLink: waLink(msg), waAberto: false });
+    ocupado(submitBtn);
+    await salvarNaPlanilha({ ...lead, ...respostas, status: 'Completo', pagina: location.href });
     location.href = `${BASE}obrigado/`;
   });
 }
@@ -268,6 +286,12 @@ const thanksWhats = document.getElementById('thanksWhats');
 if (thanksWhats) {
   const lead = lerLead();
   thanksWhats.href = (lead && lead.waLink) || waLink('Olá! Acabei de fazer meu cadastro de revendedora Panta.');
+  // Abre o WhatsApp sozinho uma única vez, depois que o Pixel registrou a conversão.
+  // Navegar na mesma aba funciona em celulares e navegadores internos, onde popups são bloqueados.
+  if (lead && lead.waLink && !lead.waAberto) {
+    guardarLead({ ...lead, waAberto: true });
+    setTimeout(() => { location.href = lead.waLink; }, 1500);
+  }
 }
 
 /* ---------- Botão flutuante de WhatsApp (capta o contato antes de abrir a conversa) ---------- */
@@ -300,13 +324,15 @@ if (whatsFloat && waModal && waForm) {
   waModal.querySelectorAll('[data-wa-close]').forEach((el) => el.addEventListener('click', fecharWaModal));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !waModal.hidden) fecharWaModal(); });
 
-  waForm.addEventListener('submit', (e) => {
+  waForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = waForm.elements;
-    if (!contatoValido(f, document.getElementById('waError'))) return;
+    const btn = waForm.querySelector('[type="submit"]');
+    if (btn.disabled || !contatoValido(f, document.getElementById('waError'))) return;
     const nome = f.nome.value.trim();
     const cidade = `${f.cidade.value.trim()}/${f.uf.value.trim().toUpperCase()}`;
-    salvarNaPlanilha({
+    ocupado(btn, 'Abrindo o WhatsApp…');
+    await salvarNaPlanilha({
       id: novoId('wa-'),
       status: 'Botão WhatsApp',
       nome,
@@ -315,9 +341,8 @@ if (whatsFloat && waModal && waForm) {
       uf: f.uf.value.trim().toUpperCase(),
       pagina: location.href,
     });
-    const link = waLink(`Olá! Sou ${nome}, de ${cidade}, e quero saber mais sobre a revenda Panta.`);
-    window.open(link, '_blank', 'noopener');
-    fecharWaModal();
+    // Mesma aba: funciona em celulares e navegadores internos, onde popups são bloqueados
+    location.href = waLink(`Olá! Sou ${nome}, de ${cidade}, e quero saber mais sobre a revenda Panta.`);
   });
 }
 
